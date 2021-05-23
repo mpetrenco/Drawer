@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DrawerViewController: UIViewController {
+public class DrawerViewController: UIViewController {
     
     // MARK: - Public properties
     
@@ -15,7 +15,7 @@ class DrawerViewController: UIViewController {
      * Change this value to specify your own custom corner radius value.
      * Default corner radius value: `20.0`
      */
-    var cornerRadius: CGFloat = 20.0 {
+    public var cornerRadius: CGFloat = 20.0 {
         didSet {
             draggableController.view.roundCorners([.topLeft, .topRight],
                                                   radius: cornerRadius)
@@ -26,7 +26,7 @@ class DrawerViewController: UIViewController {
      * Change the drawer's position, from:  `.hidden`, `.partial`, `.semi` and `.full`.
      * Default position: `.partial`
      */
-    var position: DrawerPosition = .partial {
+    public var position: DrawerPosition = .partial {
         didSet {
             bottomAnchorConstraint.constant = position.offset
             
@@ -47,8 +47,8 @@ class DrawerViewController: UIViewController {
     
     // MARK: - Initializers
     
-    init(parentController: UIViewController,
-         draggableController: UIViewController) {
+    public init(parentController: UIViewController,
+                draggableController: UIViewController) {
         
         self.parentController = parentController
         self.draggableController = draggableController
@@ -61,7 +61,7 @@ class DrawerViewController: UIViewController {
     
     // MARK: - View lifecycle
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         setupControllers()
         setupConstraints()

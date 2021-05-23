@@ -7,7 +7,7 @@
 
 import CoreGraphics
 
-enum DrawerPosition {
+public enum DrawerPosition {
     case hidden
     case partial
     case semi
