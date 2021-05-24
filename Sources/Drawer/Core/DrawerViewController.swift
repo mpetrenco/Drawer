@@ -13,9 +13,9 @@ public class DrawerViewController: UIViewController {
     
     /**
      * Change this value to specify your own custom corner radius value.
-     * Default corner radius value: `20.0`
+     * Default corner radius value: `0.0`
      */
-    public var cornerRadius: CGFloat = 20.0 {
+    public var cornerRadius: CGFloat = 0.0 {
         didSet {
             draggableController.view.roundCorners([.topLeft, .topRight],
                                                   radius: cornerRadius)
@@ -28,6 +28,9 @@ public class DrawerViewController: UIViewController {
      */
     public var position: DrawerPosition = .partial {
         didSet {
+            
+            if bottomAnchorConstraint == nil { return }
+            
             bottomAnchorConstraint.constant = position.offset
             
             UIView.animate(withDuration: 0.3,
