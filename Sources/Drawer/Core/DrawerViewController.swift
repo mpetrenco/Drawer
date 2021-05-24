@@ -41,6 +41,12 @@ public class DrawerViewController: UIViewController {
         }
     }
     
+    /**
+     * Speficies if the drawer element can be dragged via a pan gesture.
+     * Default value: `true`
+     */
+    public var isDraggable = true
+    
     // MARK: - Private properties
     
     private var parentController: UIViewController
@@ -100,6 +106,8 @@ public class DrawerViewController: UIViewController {
     // MARK: - Gesture handlers
     
     @objc private func handlePanGesture(_ sender: UIPanGestureRecognizer) {
+        
+        guard isDraggable else { return }
         
         let yOffset = sender.translation(in: view).y
         

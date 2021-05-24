@@ -19,7 +19,7 @@ struct Constants {
         static let height: CGFloat = Constants.Screen.height - topPadding
         static let hiddenBottomOffset: CGFloat = Constants.Screen.height - topPadding
         static let partialBottomOffset: CGFloat = hiddenBottomOffset - 209.0
-        static let semiBottomOffset: CGFloat = Constants.Screen.height / 2 - topPadding
+        static let semiBottomOffset: CGFloat = hiddenBottomOffset - 443.0
         static let fullBottomOffset: CGFloat = 0
     }
 }
