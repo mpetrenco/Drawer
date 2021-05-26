@@ -8,21 +8,36 @@
 import CoreGraphics
 
 public enum DrawerPosition {
-    case hidden
     case partial
     case semi
     case full
+}
+
+class DrawerRatio {
     
-    var offset: CGFloat {
-        switch self {
-        case .hidden:
-            return Constants.Drawer.hiddenBottomOffset
+    private static var partial: CGFloat = 0.2
+    private static var semi: CGFloat = 0.5
+    private static var full: CGFloat = 0.9
+    
+    static func ratio(for position: DrawerPosition) -> CGFloat {
+        switch position {
         case .partial:
-            return Constants.Drawer.partialBottomOffset
+            return 1 - partial
         case .semi:
-            return Constants.Drawer.semiBottomOffset
+            return 1 - semi
         case .full:
-            return Constants.Drawer.fullBottomOffset
+            return 1 - full
+        }
+    }
+    
+    static func setRatio(_ ratio: CGFloat, for position: DrawerPosition) {
+        switch position {
+        case .partial:
+            partial = ratio
+        case .semi:
+            semi = ratio
+        case .full:
+            full = ratio
         }
     }
 }

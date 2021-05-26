@@ -12,17 +12,6 @@ public class DrawerViewController: UIViewController {
     // MARK: - Public properties
     
     /**
-     * Change this value to specify your own custom corner radius value.
-     * Default corner radius value: `0.0`
-     */
-    public var cornerRadius: CGFloat = 0.0 {
-        didSet {
-            draggableController.view.roundCorners([.topLeft, .topRight],
-                                                  radius: cornerRadius)
-        }
-    }
-    
-    /**
      * Change the drawer's position, from:  `.hidden`, `.partial`, `.semi` and `.full`.
      * Default position: `.partial`
      */
@@ -31,7 +20,7 @@ public class DrawerViewController: UIViewController {
             
             if bottomAnchorConstraint == nil { return }
             
-            bottomAnchorConstraint.constant = position.offset
+            bottomAnchorConstraint.constant = Constants.Screen.height * DrawerRatio.ratio(for: position)
             
             UIView.animate(withDuration: 0.3,
                            delay: 0,
@@ -53,6 +42,7 @@ public class DrawerViewController: UIViewController {
     private var draggableController: UIViewController
     private var bottomAnchorConstraint: NSLayoutConstraint!
     private var startingBottomConstant: CGFloat = 0.0
+    private var drawerRatio = DrawerRatio()
     
     // MARK: - Initializers
     
@@ -66,6 +56,12 @@ public class DrawerViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("Coder initialization not supported.")
+    }
+    
+    // MARK: - Public methods
+    
+    func setHeightRatio(_ heightRatio: CGFloat, for position: DrawerPosition) {
+        DrawerRatio.setRatio(heightRatio, for: position)
     }
     
     // MARK: - View lifecycle
@@ -85,14 +81,17 @@ public class DrawerViewController: UIViewController {
     }
     
     private func setupConstraints() {
+        
+        let bottomOffset = Constants.Screen.height * DrawerRatio.ratio(for: position)
+        
         draggableController.view.translatesAutoresizingMaskIntoConstraints = false
         bottomAnchorConstraint = draggableController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor,
-                                                                                  constant: position.offset)
+                                                                                  constant: bottomOffset)
         
         NSLayoutConstraint.activate([
             draggableController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             draggableController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            draggableController.view.heightAnchor.constraint(equalToConstant: Constants.Drawer.height),
+            draggableController.view.heightAnchor.constraint(equalToConstant: Constants.Screen.height),
             bottomAnchorConstraint
         ])
     }
