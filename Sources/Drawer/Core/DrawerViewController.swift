@@ -42,7 +42,6 @@ public class DrawerViewController: UIViewController {
     private var draggableController: UIViewController
     private var bottomAnchorConstraint: NSLayoutConstraint!
     private var startingBottomConstant: CGFloat = 0.0
-    private var drawerRatio = DrawerRatio()
     
     // MARK: - Initializers
     
