@@ -17,16 +17,8 @@ public class DrawerViewController: UIViewController {
      */
     public var position: DrawerPosition = .partial {
         didSet {
-            
-            if bottomAnchorConstraint == nil { return }
-            
-            bottomAnchorConstraint.constant = Constants.Screen.height * DrawerRatio.ratio(for: position)
-            
-            UIView.animate(withDuration: 0.3,
-                           delay: 0,
-                           options: .curveEaseInOut) { [unowned self] in
-                view.layoutSubviews()
-            }
+            let newValue = Constants.Screen.height * DrawerRatio.ratio(for: position)
+            changeBottomAnchorConstraint(to: newValue)
         }
     }
     
@@ -36,12 +28,26 @@ public class DrawerViewController: UIViewController {
      */
     public var isDraggable = true
     
+    /**
+     * Specifies if the drawer element is hidden.
+     * Default value: `false`
+     */
+    public var isHidden: Bool = false  {
+        didSet {
+            let hiddenValue = Constants.Screen.height
+            let positionValue = Constants.Screen.height * DrawerRatio.ratio(for: position)
+            
+            changeBottomAnchorConstraint(to: isHidden ? hiddenValue : positionValue)
+        }
+    }
+    
     // MARK: - Private properties
     
     private var parentController: UIViewController
     private var draggableController: UIViewController
     private var bottomAnchorConstraint: NSLayoutConstraint!
     private var startingBottomConstant: CGFloat = 0.0
+    
     
     // MARK: - Initializers
     
@@ -123,6 +129,8 @@ public class DrawerViewController: UIViewController {
         }
     }
     
+    // MARK: - Helper methods
+    
     private func changePosition(isExpanding: Bool) {
         
         if position == .full {
@@ -138,6 +146,18 @@ public class DrawerViewController: UIViewController {
         if (position == .partial) {
             position = isExpanding ? .semi : .partial
             return
+        }
+    }
+    
+    private func changeBottomAnchorConstraint(to constant: CGFloat) {
+        if bottomAnchorConstraint == nil { return }
+        
+        bottomAnchorConstraint.constant = constant
+        
+        UIView.animate(withDuration: 0.3,
+                       delay: 0,
+                       options: .curveEaseInOut) { [unowned self] in
+            view.layoutSubviews()
         }
     }
     
