@@ -17,7 +17,7 @@ public class DrawerViewController: UIViewController {
      */
     public var position: DrawerPosition = .partial {
         didSet {
-            let newValue = Constants.Screen.height * DrawerRatio.ratio(for: position)
+            let newValue = DrawerHeight.height(for: position)
             changeBottomAnchorConstraint(to: newValue)
         }
     }
@@ -35,19 +35,23 @@ public class DrawerViewController: UIViewController {
     public var isHidden: Bool = false  {
         didSet {
             let hiddenValue = Constants.Screen.height
-            let positionValue = Constants.Screen.height * DrawerRatio.ratio(for: position)
+            let positionValue = DrawerHeight.height(for: position)
             
             changeBottomAnchorConstraint(to: isHidden ? hiddenValue : positionValue)
         }
     }
     
+    /**
+     * A reference to the bottom anchor, responsible for the sliding offset.
+     * Override if you want custom control of the drawer.
+     */
+    public var bottomAnchorConstraint: NSLayoutConstraint!
+    
     // MARK: - Private properties
     
     private var parentController: UIViewController
     private var draggableController: UIViewController
-    private var bottomAnchorConstraint: NSLayoutConstraint!
     private var startingBottomConstant: CGFloat = 0.0
-    
     
     // MARK: - Initializers
     
@@ -66,7 +70,11 @@ public class DrawerViewController: UIViewController {
     // MARK: - Public methods
     
     func setHeightRatio(_ heightRatio: CGFloat, for position: DrawerPosition) {
-        DrawerRatio.setRatio(heightRatio, for: position)
+        DrawerHeight.setHeight(Constants.Screen.height * heightRatio, for: position)
+    }
+    
+    func setHeight(_ height: CGFloat, for position: DrawerPosition) {
+        DrawerHeight.setHeight(height, for: position)
     }
     
     // MARK: - View lifecycle
@@ -87,7 +95,7 @@ public class DrawerViewController: UIViewController {
     
     private func setupConstraints() {
         
-        let bottomOffset = Constants.Screen.height * DrawerRatio.ratio(for: position)
+        let bottomOffset = DrawerHeight.height(for: position)
         
         draggableController.view.translatesAutoresizingMaskIntoConstraints = false
         bottomAnchorConstraint = draggableController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor,

@@ -54,9 +54,27 @@ Toggle drawer display
 drawerViewController.isHidden = false
 ```
 
+## Customization:
+
+
 Override height ratio for each position.  
 > Values should range between `0` and `1`, where `1` is the full height of the screen.
 
 ```swift
-func setHeightRatio(0.3, for: .partial)
+drawerViewController.setHeightRatio(0.3, for: .partial)
+```
+
+Override height for each position.  
+
+```swift
+drawerViewController.setHeight(400, for: .semi)
+```
+
+> **Note:**  
+> You can easily combine height and ratio customizations.
+
+```swift
+drawerViewController.setHeightRatio(0.3, for: .partial)
+drawerViewController.setHeight(400, for: .semi)
+drawerViewController.setHeightRatio(0.8, for: .full)
 ```
