@@ -2,7 +2,7 @@
 <p align="center">
 <img src="https://i.postimg.cc/8k6jWhnp/logo.png" alt="Logo" width="200px">
 
-A simple implementation of an expandable bottom drawer view.
+<p style="text-align: center;">A simple implementation of an expandable bottom drawer view.</p>
 </p>
 
 ## Instalation
