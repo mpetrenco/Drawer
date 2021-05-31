@@ -95,7 +95,10 @@ public class DrawerViewController: UIViewController {
     
     private func setupConstraints() {
         
-        let bottomOffset = DrawerHeight.height(for: position)
+        let hiddenValue = Constants.Screen.height
+        let positionValue = DrawerHeight.height(for: position)
+        
+        let bottomOffset = isHidden ? hiddenValue : positionValue
         
         draggableController.view.translatesAutoresizingMaskIntoConstraints = false
         bottomAnchorConstraint = draggableController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor,
