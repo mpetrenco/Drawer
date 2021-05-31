@@ -69,11 +69,11 @@ public class DrawerViewController: UIViewController {
     
     // MARK: - Public methods
     
-    func setHeightRatio(_ heightRatio: CGFloat, for position: DrawerPosition) {
+    public func setHeightRatio(_ heightRatio: CGFloat, for position: DrawerPosition) {
         DrawerHeight.setHeight(Constants.Screen.height * heightRatio, for: position)
     }
     
-    func setHeight(_ height: CGFloat, for position: DrawerPosition) {
+    public func setHeight(_ height: CGFloat, for position: DrawerPosition) {
         DrawerHeight.setHeight(height, for: position)
     }
     
