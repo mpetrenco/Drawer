@@ -37,7 +37,7 @@ present(drawerViewController, animated: true)
 ## Features:
 
 Programmatically change drawer position.  
-> Pick between: `.partial`, `.semi`, `.full`
+> Pick between: `.hidden`, `.partial`, `.semi`, `.full`
 
 ```swift
 drawerViewController.position = .partial
@@ -49,10 +49,11 @@ Toggle user drag gestures
 drawerViewController.isDraggable = true
 ```
 
-Toggle drawer display
+Toggle dismiss behavior
+> Setting this value to true allows you to dismiss the drawer with a drag gesture from the `.partial` position.
 
 ```swift
-drawerViewController.isHidden = false
+drawerViewController.isDismissable = false
 ```
 
 ## Customization:

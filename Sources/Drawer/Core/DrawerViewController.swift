@@ -29,18 +29,11 @@ public class DrawerViewController: UIViewController {
     public var isDraggable = true
     
     /**
-     * Specifies if the drawer element is hidden.
+     * Specifies if the drawer element can be dismissed by a drag gesture.
      * Default value: `false`
      */
-    public var isHidden: Bool = false  {
-        didSet {
-            let hiddenValue = Constants.Screen.height
-            let positionValue = DrawerHeight.height(for: position)
-            
-            changeBottomAnchorConstraint(to: isHidden ? hiddenValue : positionValue)
-        }
-    }
-    
+    public var isDismissable = false
+        
     /**
      * A reference to the bottom anchor, responsible for the sliding offset.
      * Override if you want custom control of the drawer.
@@ -95,10 +88,7 @@ public class DrawerViewController: UIViewController {
     
     private func setupConstraints() {
         
-        let hiddenValue = Constants.Screen.height
-        let positionValue = DrawerHeight.height(for: position)
-        
-        let bottomOffset = isHidden ? hiddenValue : positionValue
+        let bottomOffset = DrawerHeight.height(for: position)
         
         draggableController.view.translatesAutoresizingMaskIntoConstraints = false
         bottomAnchorConstraint = draggableController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor,
@@ -155,7 +145,8 @@ public class DrawerViewController: UIViewController {
         }
         
         if (position == .partial) {
-            position = isExpanding ? .semi : .partial
+            let nextPosition: DrawerPosition = isDismissable ? .hidden : .partial
+            position = isExpanding ? .semi : nextPosition
             return
         }
     }

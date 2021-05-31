@@ -11,15 +11,19 @@ public enum DrawerPosition {
     case partial
     case semi
     case full
+    case hidden
 }
 
 class DrawerHeight {
+    private static var hidden: CGFloat = Constants.Screen.height
     private static var partial: CGFloat = Constants.Screen.height * 3 / 4
     private static var semi: CGFloat = Constants.Screen.height / 2
     private static var full: CGFloat = Constants.Screen.height * 1 / 10
     
     static func height(for position: DrawerPosition) -> CGFloat {
         switch position {
+        case .hidden:
+            return hidden
         case .partial:
             return partial
         case .semi:
@@ -37,6 +41,8 @@ class DrawerHeight {
             semi = Constants.Screen.height - height
         case .full:
             full = Constants.Screen.height - height
+        case .hidden:
+            break
         }
     }
 }
