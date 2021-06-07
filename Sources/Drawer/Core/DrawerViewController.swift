@@ -19,6 +19,7 @@ public class DrawerViewController: UIViewController {
         didSet {
             let newValue = DrawerHeight.height(for: position)
             changeBottomAnchorConstraint(to: newValue)
+            changeBackgroundTransparency(for: position)
         }
     }
     
@@ -45,6 +46,13 @@ public class DrawerViewController: UIViewController {
     private var parentController: UIViewController
     private var draggableController: UIViewController
     private var startingBottomConstant: CGFloat = 0.0
+    
+    private lazy var backgroundView: UIView = {
+        let view = UIView(frame: UIScreen.main.bounds)
+        view.backgroundColor = .black
+        view.alpha = 0.0
+        return view
+    }()
     
     // MARK: - Initializers
     
@@ -77,6 +85,7 @@ public class DrawerViewController: UIViewController {
         setupControllers()
         setupConstraints()
         setupGestures()
+        setupBackgroundView()
     }
     
     // MARK: - Layout setup
@@ -84,6 +93,10 @@ public class DrawerViewController: UIViewController {
     private func setupControllers() {
         add(parentController)
         add(draggableController)
+    }
+    
+    private func setupBackgroundView() {
+        view.insertSubview(backgroundView, aboveSubview: parentController.view)
     }
     
     private func setupConstraints() {
@@ -114,17 +127,19 @@ public class DrawerViewController: UIViewController {
         
         guard isDraggable else { return }
         
-        let yOffset = sender.translation(in: view).y
+        let offset = sender.translation(in: view).y
         
         switch sender.state {
         case .began:
             startingBottomConstant = bottomAnchorConstraint.constant
         case .changed:
-            if startingBottomConstant + yOffset > 0 {
-                bottomAnchorConstraint.constant = startingBottomConstant + yOffset
+            if startingBottomConstant + offset > 0 {
+                backgroundView.alpha = alpha(for: offset)
+                bottomAnchorConstraint.constant = startingBottomConstant + offset
             }
         case .ended:
-            changePosition(isExpanding: yOffset < 0)
+            changePosition(isExpanding: offset < 0)
+            
         default:
             break
         }
@@ -151,6 +166,19 @@ public class DrawerViewController: UIViewController {
         }
     }
     
+    private func changeBackgroundTransparency(for position: DrawerPosition) {
+        if position == .partial || position == .hidden {
+            backgroundView.isUserInteractionEnabled = false
+        } else {
+            backgroundView.isUserInteractionEnabled = true
+        }
+        
+        UIView.animate(withDuration: 0.3) { [unowned self] in
+            let offset = DrawerHeight.height(for: position)
+            backgroundView.alpha = alpha(for: offset)
+        }
+    }
+    
     private func changeBottomAnchorConstraint(to constant: CGFloat) {
         if bottomAnchorConstraint == nil { return }
         
@@ -161,6 +189,11 @@ public class DrawerViewController: UIViewController {
                        options: .curveEaseInOut) { [unowned self] in
             view.layoutSubviews()
         }
+    }
+    
+    private func alpha(for offset: CGFloat) -> CGFloat {
+        guard bottomAnchorConstraint != nil else { return 0.0 }
+        return min(1 - bottomAnchorConstraint.constant / UIScreen.main.bounds.height, 0.80)
     }
     
 }
