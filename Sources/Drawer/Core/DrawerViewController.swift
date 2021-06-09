@@ -34,7 +34,12 @@ public class DrawerViewController: UIViewController {
      * Default value: `false`
      */
     public var isDismissable = false
-        
+    
+    /**
+     * A reference to the object implementing the Drawer delegate.
+     */
+    public weak var delegate: DrawerViewControllerDelegate?
+    
     /**
      * A reference to the bottom anchor, responsible for the sliding offset.
      * Override if you want custom control of the drawer.
@@ -137,6 +142,8 @@ public class DrawerViewController: UIViewController {
                 backgroundView.alpha = alpha(for: offset)
                 bottomAnchorConstraint.constant = startingBottomConstant + offset
             }
+            delegate?.drawerViewController(self,
+                                           didChangeBottomOffsetTo: bottomAnchorConstraint.constant)
         case .ended:
             changePosition(isExpanding: offset < 0)
             
