@@ -141,11 +141,14 @@ public class DrawerViewController: UIViewController {
             if startingBottomConstant + offset > 0 {
                 backgroundView.alpha = alpha(for: offset)
                 bottomAnchorConstraint.constant = startingBottomConstant + offset
+                delegate?.drawerViewController(self,
+                                               didChangeBottomOffsetTo: bottomAnchorConstraint.constant)
             }
-            delegate?.drawerViewController(self,
-                                           didChangeBottomOffsetTo: bottomAnchorConstraint.constant)
         case .ended:
             changePosition(isExpanding: offset < 0)
+            delegate?.drawerViewController(self,
+                                           didChangePosition: position,
+                                           withBottomOffset: bottomAnchorConstraint.constant)
             
         default:
             break
